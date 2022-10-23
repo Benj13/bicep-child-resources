@@ -1,4 +1,4 @@
-name: 'Deploy VNet Bicep'
+name: 'Deploy VNet Bicep with child resources'
 
 on:
   workflow_dispatch:
