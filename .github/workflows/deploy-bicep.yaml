@@ -24,7 +24,7 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: |
-            $subscriptionId = (ConvertFrom-Json -InputObject '${{ inputs.addressSpacesJson }}').subscriptionId
+            $subscriptionId = ${{ secrets.SUBSCRIPTION_ID }}
             Set-AzContext -SubscriptionId $subscriptionId
 
       - name: Bicep
