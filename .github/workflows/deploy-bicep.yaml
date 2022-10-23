@@ -1,0 +1,46 @@
+name: 'Deploy VNet Bicep'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  add-address-space:
+    name: Deploy VNet
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Azure Login with deployment credentials
+        id: az-login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.deploymentCredentials }}
+          enable-AzPSSession: true
+
+      - name: Set subscription
+        id: set-subscription
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            $subscriptionId = (ConvertFrom-Json -InputObject '${{ inputs.addressSpacesJson }}').subscriptionId
+            Set-AzContext -SubscriptionId $subscriptionId
+
+      - name: Bicep
+        id: bicep
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            $parameters = @{
+              virtualNetworkName = "vnetWithDefaultSubnet"
+              addressPrefixes = @(
+                "10.0.0.0/24"
+              )
+            }
+
+            $deployment = New-AzResourceGroupDeployment `
+              -ResourceGroupName "rgVnetWithDefaultSubnet" `
+              -TemplateFile 'resources/vnet-default-subnet/main.bicep' `
+              -TemplateParameterObject $parameters
