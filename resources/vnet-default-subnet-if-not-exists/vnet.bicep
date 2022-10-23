@@ -1,9 +1,6 @@
-targetScope = 'resourceGroup'
-
 param virtualNetworkName string
-param addressPrefixes array = []
-
-param location string = resourceGroup().location
+param addressPrefixes array
+param location string
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: virtualNetworkName

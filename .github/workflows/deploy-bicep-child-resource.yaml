@@ -24,17 +24,26 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: |
-            $vnetName = "vnetWithDefaultSubnet"
-            $rgName = "rgVnetWithDefaultSubnet"
+            $vnetName = "vnetWithDefaultSubnetIfNotExists"
+            $rgName = "rgVnetWithDefaultSubnetIfNotExists"
 
+            try {
+              Get-AzVirtualNetwork -Name $vnetName -ResourceGroupName $rgName
+              $vnetExists = $true
+            }
+            catch {
+              $vnetExists = $false
+            }
+            
             $parameters = @{
               virtualNetworkName = $vnetName
               addressPrefixes = @(
                 "10.0.0.0/24"
               )
+              virtualNetworkExists = $vnetExists
             }
 
             $deployment = New-AzResourceGroupDeployment `
               -ResourceGroupName $rgName `
-              -TemplateFile 'resources/vnet-default-subnet/main.bicep' `
+              -TemplateFile 'resources/vnet-default-subnet-if-not-exists/main.bicep' `
               -TemplateParameterObject $parameters
