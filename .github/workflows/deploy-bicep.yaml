@@ -18,15 +18,6 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
-      - name: Set subscription
-        id: set-subscription
-        uses: azure/powershell@v1
-        with:
-          azPSVersion: "latest"
-          inlineScript: |
-            $subscriptionId = ${{ secrets.SUBSCRIPTION_ID }}
-            Set-AzContext -SubscriptionId $subscriptionId
-
       - name: Bicep
         id: bicep
         uses: azure/powershell@v1
