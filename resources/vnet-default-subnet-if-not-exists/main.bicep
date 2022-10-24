@@ -10,11 +10,18 @@ resource existingVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' e
   name: virtualNetworkName
 }
 
+var defaultSubnets = [for addressPrefix in addressPrefixes: {
+  name: 'default-${replace(addressPrefix, '/', '-')}'
+  properties: {
+    addressPrefix: addressPrefix
+  }
+}]
+
 module virtualNetwork 'vnet.bicep' = {
   name: 'virtualNetwork'
   params: {
     location: location
     virtualNetworkName: virtualNetworkName
-    addressPrefixes: virtualNetworkExists ? existingVirtualNetwork.properties.subnets : addressPrefixes
+    addressPrefixes: virtualNetworkExists ? existingVirtualNetwork.properties.subnets : defaultSubnets
   }
 }

@@ -9,11 +9,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
     addressSpace: {
       addressPrefixes: addressPrefixes
     }
-    subnets: [for addressPrefix in addressPrefixes: {
-      name: 'default-${replace(addressPrefix, '/', '-')}'
-      properties: {
-        addressPrefix: addressPrefix
-      }
-    }]
+    subnets: addressPrefixes
   }
 }
