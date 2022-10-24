@@ -1,5 +1,6 @@
 param virtualNetworkName string
 param addressPrefixes array
+param subnets array
 param location string
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
@@ -9,6 +10,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
     addressSpace: {
       addressPrefixes: addressPrefixes
     }
-    subnets: addressPrefixes
+    subnets: subnets
   }
 }

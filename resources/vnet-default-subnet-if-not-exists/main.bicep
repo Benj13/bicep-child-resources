@@ -22,6 +22,7 @@ module virtualNetwork 'vnet.bicep' = {
   params: {
     location: location
     virtualNetworkName: virtualNetworkName
-    addressPrefixes: virtualNetworkExists ? existingVirtualNetwork.properties.subnets : defaultSubnets
+    addressPrefixes: virtualNetworkExists ? existingVirtualNetwork.properties.addressSpace.addressPrefixes : addressPrefixes 
+    subnets: virtualNetworkExists ? existingVirtualNetwork.properties.subnets : defaultSubnets
   }
 }
