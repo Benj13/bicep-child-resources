@@ -17,24 +17,12 @@ resource existingVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' e
   name: virtualNetworkName
 }
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
-  name: virtualNetworkName
-  location: location
-  properties: {
-    addressSpace: {
-      addressPrefixes: addressPrefixes
-    }
+module virtualNetwork 'vnet.bicep' = {
+  name: 'virtualNetwork'
+  params: {
+    location: location
+    virtualNetworkName: virtualNetworkName
+    addressPrefixes: virtualNetworkExists ? existingVirtualNetwork.properties.addressSpace.addressPrefixes : addressPrefixes 
     subnets: virtualNetworkExists ? existingVirtualNetwork.properties.subnets : defaultSubnets
   }
 }
-
-
-// module virtualNetwork 'vnet.bicep' = {
-//   name: 'virtualNetwork'
-//   params: {
-//     location: location
-//     virtualNetworkName: virtualNetworkName
-//     addressPrefixes: virtualNetworkExists ? existingVirtualNetwork.properties.addressSpace.addressPrefixes : addressPrefixes 
-//     subnets: virtualNetworkExists ? existingVirtualNetwork.properties.subnets : defaultSubnets
-//   }
-// }
