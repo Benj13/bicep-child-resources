@@ -38,4 +38,5 @@ jobs:
             $deployment = New-AzResourceGroupDeployment `
               -ResourceGroupName $rgName `
               -TemplateFile 'resources/vnet-default-subnet/main.bicep' `
-              -TemplateParameterObject $parameters
+              -TemplateParameterObject $parameters `
+              -WhatIf
